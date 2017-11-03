@@ -20,48 +20,48 @@ def user_logged_in_handler(sender, **kwargs):
     write_points(data)
 
 
-def user_post_delete_handler(sender, **kwargs):
-    """Sends a metric to InfluxDB when a User object is deleted."""
-    total = get_user_model().objects.all().count()
-    data = [{
-        'measurement': 'django_auth_user_delete',
-        'tags': {'host': settings.INFLUXDB_TAGS_HOST, },
-        'fields': {'value': 1, },
-        'time': timezone.now().isoformat(),
-    }]
-    write_points(data)
+# def user_post_delete_handler(sender, **kwargs):
+#     """Sends a metric to InfluxDB when a User object is deleted."""
+#     total = get_user_model().objects.all().count()
+#     data = [{
+#         'measurement': 'django_auth_user_delete',
+#         'tags': {'host': settings.INFLUXDB_TAGS_HOST, },
+#         'fields': {'value': 1, },
+#         'time': timezone.now().isoformat(),
+#     }]
+#     write_points(data)
 
-    data = [{
-        'measurement': 'django_auth_user_count',
-        'tags': {'host': settings.INFLUXDB_TAGS_HOST, },
-        'fields': {'value': total, },
-        'time': timezone.now().isoformat(),
-    }]
-    write_points(data)
-
-
-post_delete.connect(user_post_delete_handler, sender=settings.AUTH_USER_MODEL)
+#     data = [{
+#         'measurement': 'django_auth_user_count',
+#         'tags': {'host': settings.INFLUXDB_TAGS_HOST, },
+#         'fields': {'value': total, },
+#         'time': timezone.now().isoformat(),
+#     }]
+#     write_points(data)
 
 
-def user_post_save_handler(**kwargs):
-    """Sends a metric to InfluxDB when a new User object is created."""
-    if kwargs.get('created'):
-        total = get_user_model().objects.all().count()
-        data = [{
-            'measurement': 'django_auth_user_create',
-            'tags': {'host': settings.INFLUXDB_TAGS_HOST, },
-            'fields': {'value': 1, },
-            'time': timezone.now().isoformat(),
-        }]
-        write_points(data)
-
-        data = [{
-            'measurement': 'django_auth_user_count',
-            'tags': {'host': settings.INFLUXDB_TAGS_HOST, },
-            'fields': {'value': total, },
-            'time': timezone.now().isoformat(),
-        }]
-        write_points(data)
+# post_delete.connect(user_post_delete_handler, sender=settings.AUTH_USER_MODEL)
 
 
-post_save.connect(user_post_save_handler, sender=settings.AUTH_USER_MODEL)
+# def user_post_save_handler(**kwargs):
+#     """Sends a metric to InfluxDB when a new User object is created."""
+#     if kwargs.get('created'):
+#         total = get_user_model().objects.all().count()
+#         data = [{
+#             'measurement': 'django_auth_user_create',
+#             'tags': {'host': settings.INFLUXDB_TAGS_HOST, },
+#             'fields': {'value': 1, },
+#             'time': timezone.now().isoformat(),
+#         }]
+#         write_points(data)
+
+#         data = [{
+#             'measurement': 'django_auth_user_count',
+#             'tags': {'host': settings.INFLUXDB_TAGS_HOST, },
+#             'fields': {'value': total, },
+#             'time': timezone.now().isoformat(),
+#         }]
+#         write_points(data)
+
+
+# post_save.connect(user_post_save_handler, sender=settings.AUTH_USER_MODEL)
